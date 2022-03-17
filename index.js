@@ -26,15 +26,16 @@ io.on('connection', (socket) => {
   allusers[socket.id] = {left: 0, top: 0};
   io.emit("user_connected", allusers);
 
-  socket.on("alert_all", (text)=>{
+  socket.on("add_item", (text)=>{
     io.emit("change", socket.id, text)
   })
-  
+  socket.on("delete_item", (items) => {
+    io.emit("delete", socket.id, items)
+  })
   socket.on("mouse_moved", (x,y)=> {
     socket.broadcast.emit("change_mouse", x, y, socket.id);
     //socket.broadcast.emit
   })
-
   socket.on("disconnect", () => {
     delete allusers[socket.id];
     io.emit("user_connected", allusers);
